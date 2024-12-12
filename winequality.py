@@ -6,10 +6,25 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import graphviz
 
+# Map the quality column to broader categories
+def quality_category(q):
+    if q <= 4:
+        return 'Low Quality'
+    elif 5 <= q <= 6:
+        return 'Standard Quality'
+    else:
+        return 'High Quality'
+
+
 # 1. Load dataset
-data = pd.read_csv('D:\\Nam_3\\CSTTNT\\prj2_decision_tree\\wine+quality\\winequality-red.csv', sep=';')
-X = data.drop('quality', axis=1)
-y = data['quality']
+data = pd.read_csv('D:\\Nam_3\\CSTTNT\\prj2_decision_tree\\winequality\\winequality-white.csv', sep=';')
+
+# Apply the mapping function
+data['quality_category'] = data['quality'].apply(quality_category)
+
+# Update X and y
+X = data.drop(['quality', 'quality_category'], axis=1)
+y = data['quality_category']
 
 # 2. Define splits
 proportions = [(0.4, 0.6), (0.6, 0.4), (0.8, 0.2), (0.9, 0.1)]
@@ -21,8 +36,7 @@ for train_size, test_size in proportions:
     splits.append((X_train, X_test, y_train, y_test))
 
 # Định nghĩa độ sâu tối đa của cây
-max_depth_value = 5  # Bạn có thể thay đổi giá trị này để điều chỉnh độ sâu của cây
-
+max_depth_value = None  # Bạn có thể thay đổi giá trị này để điều chỉnh độ sâu của cây
 
 # 3. Visualize distributions
 
